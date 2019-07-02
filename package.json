@@ -1,0 +1,141 @@
+{
+	"name": "GASLinkPuller",
+	"version": "0.0.1",
+	"description": "GASLinkPuller allows you to pull links from emails entering into a selected folder to populate a spreadsheet",
+	"keywords": "google-apps-script",
+	"homepage": "https://github.com/Zweihander-Main/GASLinkPuller",
+	"main": "index.js",
+	"author": "Zweihänder",
+	"private": true,
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Zweihander-Main/GASLinkPuller/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:Zweihander-Main/GASLinkPuller.git"
+	},
+	"scripts": {
+		"test": "jest",
+		"build": "gulp build"
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.jsx?$": "babel-jest"
+		},
+		"coverageDirectory": "coverage",
+		"roots": [
+			"<rootDir>/src/"
+		],
+		"testEnvironment": "node",
+		"moduleNameMapper": {
+			"^.+\\.hbs$": "<rootDir>/src/__mocks__/hbsMock.js"
+		}
+	},
+	"babel": {
+		"presets": [
+			"gas"
+		]
+	},
+	"eslintConfig": {
+		"env": {
+			"node": true,
+			"jest/globals": true,
+			"es6": true,
+			"googleappsscript/googleappsscript": true
+		},
+		"parserOptions": {
+			"ecmaVersion": 2019,
+			"sourceType": "module"
+		},
+		"plugins": [
+			"jest",
+			"googleappsscript"
+		],
+		"extends": [
+			"eslint:recommended",
+			"plugin:prettier/recommended"
+		],
+		"rules": {
+			"quotes": [
+				"error",
+				"single"
+			],
+			"semi": [
+				"error",
+				"always"
+			],
+			"no-console": "off",
+			"no-mixed-spaces-and-tabs": [
+				"error",
+				"smart-tabs"
+			]
+		}
+	},
+	"jshintConfig": {
+		"esversion": 9,
+		"node": true,
+		"globals": {
+			"afterAll": false,
+			"afterEach": false,
+			"beforeAll": false,
+			"beforeEach": false,
+			"describe": false,
+			"expect": false,
+			"fit": false,
+			"it": false,
+			"jasmine": false,
+			"jest": false,
+			"pending": false,
+			"pit": false,
+			"require": false,
+			"test": false,
+			"xdescribe": false,
+			"xit": false,
+			"xtest": false
+		},
+		"laxbreak": true
+	},
+	"prettier": {
+		"singleQuote": true,
+		"trailingComma": "es5",
+		"tabWidth": 4,
+		"useTabs": true,
+		"arrowParens": "always"
+	},
+	"stylelint": {
+		"extends": "stylelint-config-standard",
+		"rules": {
+			"indentation": "tab",
+			"max-empty-lines": 2,
+			"comment-whitespace-inside": null,
+			"declaration-block-no-shorthand-property-overrides": true,
+			"declaration-colon-newline-after": null,
+			"no-descending-specificity": null
+		}
+	},
+	"browserslist": [
+		"maintained node versions",
+		"cover 99.5%"
+	],
+	"dependencies": {},
+	"devDependencies": {
+		"@babel/core": "^7.4.3",
+		"@babel/preset-env": "^7.4.3",
+		"@babel/register": "^7.4.0",
+		"@google/clasp": "^2.1.0",
+		"babel-jest": "^24.7.1",
+		"babel-preset-gas": "^2.0.4",
+		"eslint": "^5.16.0",
+		"eslint-config-prettier": "^4.1.0",
+		"eslint-plugin-googleappsscript": "^1.0.2",
+		"eslint-plugin-jest": "^22.4.1",
+		"eslint-plugin-prettier": "^3.0.1",
+		"gulp-babel": "^8.0.0",
+		"gulp-debug": "^4.0.0",
+		"jest": "^24.7.1",
+		"jest-mock-console": "^0.4.2",
+		"mock-gulp-dest": "^0.1.1",
+		"prettier": "^1.17.0"
+	}
+}
