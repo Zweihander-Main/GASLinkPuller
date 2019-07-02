@@ -96,3 +96,6 @@ CURRENT.md
 
 # Clasp info
 .clasprc.json
+keys.ts
+keys.js
+.clasp.json
