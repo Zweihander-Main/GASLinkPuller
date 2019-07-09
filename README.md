@@ -14,18 +14,18 @@ A Google Apps Script project for pulling URLs from emails in a user-selected GMa
 
 On the opening of a Google Spreadsheet with this script installed, a 'Link Puller' menu item is added. Under this item are 3 options:
 
-#### Select GMail Label
+### Select GMail Label
 
 Allows the user to select which GMail label the link puller will be checking:
 ![Label Demo](/docs/LabelDemo.gif)
 
 It's recommended to combine this with an incoming messages filter on the GMail side for maximum automation.
 
-#### Control Mail Checking
+### Control Mail Checking
 
 Turns automatic hourly checking of the GMail label on and off. If a new message is found, it will be parsed for URLs which will be added to the Spreadsheet.
 
-#### Manually Pull Messages
+### Manually Pull Messages
 
 ## Installation
 
