@@ -44,8 +44,8 @@ const pushToGAS = (done) => {
 export const clean = cleanTheBuildFolder;
 export const babel = copyBabel;
 export const push = pushToGAS;
-export const build = gulp.series(
+export const buildLocal = gulp.series(
 	cleanTheBuildFolder,
-	gulp.parallel(copyBabel, copyNonBabel),
-	pushToGAS
+	gulp.parallel(copyBabel, copyNonBabel)
 );
+export const build = gulp.series(buildLocal, pushToGAS);

@@ -89,7 +89,17 @@
 			"OAuth1": true,
 			"OAuth2": true,
 			"FirebaseApp": true
-		}
+		},
+		"overrides": [
+			{
+				"files": [
+					"gulpfile.babel.js"
+				],
+				"parserOptions": {
+					"sourceType": "module"
+				}
+			}
+		]
 	},
 	"jshintConfig": {
 		"esversion": 9,
