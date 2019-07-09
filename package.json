@@ -2,7 +2,11 @@
 	"name": "GASLinkPuller",
 	"version": "0.0.1",
 	"description": "GASLinkPuller allows you to pull links from emails entering into a selected folder to populate a spreadsheet",
-	"keywords": "google-apps-script",
+	"keywords": [
+		"google-apps-script",
+		"gsuite",
+		"apps-script"
+	],
 	"homepage": "https://github.com/Zweihander-Main/GASLinkPuller",
 	"main": "index.js",
 	"author": "Zweihänder",
@@ -34,19 +38,18 @@
 	},
 	"babel": {
 		"presets": [
-			"gas"
+			"@babel/preset-env"
 		]
 	},
 	"eslintConfig": {
 		"env": {
-			"node": true,
 			"jest/globals": true,
 			"es6": true,
-			"googleappsscript/googleappsscript": true
+			"googleappsscript/googleappsscript": true,
+			"browser": true
 		},
 		"parserOptions": {
-			"ecmaVersion": 2019,
-			"sourceType": "module"
+			"ecmaVersion": 2019
 		},
 		"plugins": [
 			"jest",
@@ -69,7 +72,23 @@
 			"no-mixed-spaces-and-tabs": [
 				"error",
 				"smart-tabs"
+			],
+			"no-unused-vars": [
+				"error",
+				{
+					"vars": "local"
+				}
 			]
+		},
+		"globals": {
+			"google": true,
+			"CardService": true,
+			"Gmail": true,
+			"Drive": true,
+			"Slides": true,
+			"OAuth1": true,
+			"OAuth2": true,
+			"FirebaseApp": true
 		}
 	},
 	"jshintConfig": {
@@ -115,27 +134,31 @@
 		}
 	},
 	"browserslist": [
-		"maintained node versions",
-		"cover 99.5%"
+		"maintained node versions"
 	],
 	"dependencies": {},
 	"devDependencies": {
-		"@babel/core": "^7.4.3",
-		"@babel/preset-env": "^7.4.3",
-		"@babel/register": "^7.4.0",
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"@babel/register": "^7.4.4",
 		"@google/clasp": "^2.1.0",
-		"babel-jest": "^24.7.1",
-		"babel-preset-gas": "^2.0.4",
-		"eslint": "^5.16.0",
-		"eslint-config-prettier": "^4.1.0",
+		"@types/google-apps-script": "^0.0.54",
+		"babel-eslint": "^10.0.2",
+		"babel-jest": "^24.8.0",
+		"babel-preset-google-apps-script": "0.0.3",
+		"del": "^5.0.0",
+		"eslint": "^6.0.1",
+		"eslint-config-prettier": "^6.0.0",
 		"eslint-plugin-googleappsscript": "^1.0.2",
-		"eslint-plugin-jest": "^22.4.1",
-		"eslint-plugin-prettier": "^3.0.1",
+		"eslint-plugin-jest": "^22.7.1",
+		"eslint-plugin-prettier": "^3.1.0",
+		"gas-lib": "^2.0.3",
+		"gulp": "^4.0.2",
 		"gulp-babel": "^8.0.0",
 		"gulp-debug": "^4.0.0",
-		"jest": "^24.7.1",
-		"jest-mock-console": "^0.4.2",
+		"jest": "^24.8.0",
+		"jest-mock-console": "^1.0.0",
 		"mock-gulp-dest": "^0.1.1",
-		"prettier": "^1.17.0"
+		"prettier": "^1.18.2"
 	}
 }

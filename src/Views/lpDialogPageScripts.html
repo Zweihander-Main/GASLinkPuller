@@ -1,0 +1,117 @@
+<script>
+	/* eslint prettier/prettier: 0 */
+	/**
+	 * Stops multiple form submits and form redirects
+	 */
+	function preventFormSubmit() {
+		const forms = document.querySelectorAll('form');
+		forms.forEach((form) => {
+			form.addEventListener('submit', function(event) {
+				event.preventDefault();
+			});
+		});
+	}
+
+	window.addEventListener('load', preventFormSubmit);
+
+	/**
+	 * Changes body from animation to outcome message
+	 */
+	function messageUpdate() {
+		document.body.classList.replace('animate', 'message');
+	}
+
+	/**
+	 * Closes modal dialog in 1.6 seconds
+	 */
+	function closeWindow() {
+		setTimeout(() => {
+			google.script.host.close();
+		}, 1600);
+	}
+
+	/**
+	 * Changes outcome message to be an ok icon
+	 */
+	function messageUpdateSuccess() {
+		const output = document.getElementById('output');
+		output.classList.add('ok-icon');
+		messageUpdate();
+		closeWindow();
+	}
+
+	/**
+	 * Changes outcome message to be a fail icon
+	 */
+	function messageUpdateFail() {
+		const output = document.getElementById('output');
+		output.classList.add('fail-icon');
+		messageUpdate();
+		closeWindow();
+	}
+
+	/**
+	 * Starts loading animation while form is processed
+	 */
+	function handleFormSubmit(formObject) {
+		document.body.classList.add('animate');
+		google.script.run.withSuccessHandler(messageUpdateSuccess).withFailureHandler(messageUpdateFail).processLPForm(formObject);
+	}
+
+	/**
+	 * Undisables submit button and removes loading animation
+	 */
+	function allowSubmit() {
+		const submit = document.getElementById('labelsForm').elements.namedItem('submit');
+		submit.disabled = false;
+		document.body.classList.remove('animate');
+	}
+
+	/**
+	 * Selects given label for use when a user has already selected one
+	 * previously.
+	 * @param  {string} label Label name
+	 */
+	function selectLabel(label) {
+		const form = document.getElementById('labelsForm');
+		const radioList = form.elements.namedItem('labels');
+		if (radioList !== null) {
+			radioList.forEach((listItem) => {
+				if (listItem.value === label) {
+					listItem.checked = true;
+				}
+			});
+
+		}
+		allowSubmit();
+	}
+
+	/**
+	 * Fetches user labels and lists them in a list.
+	 * @param  {[string]} labels List of labels
+	 */
+	function listLabels(labels) {
+		const form = document.getElementById('labelsForm');
+
+		labels.forEach((label) => {
+			const radio = document.createElement('input');
+			radio.type = 'radio';
+			radio.name = 'labels';
+			radio.value = label;
+			const labelForRadio = document.createElement('label');
+			labelForRadio.classList.add('radioLabels');
+			labelForRadio.appendChild(radio);
+			const textForRadio = document.createElement('span');
+			textForRadio.appendChild(document.createTextNode(label));
+			labelForRadio.appendChild(textForRadio);
+
+			form.insertBefore(labelForRadio, form.elements['submit']);
+		});
+
+		google.script.run.withSuccessHandler(selectLabel).returnSelectedLabel();
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		google.script.run.withSuccessHandler(listLabels).returnListOfLabels();
+	});
+</script>

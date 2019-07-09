@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<base target="_top" />
+		<?!= include('Views/commonStylesheet'); ?>
+	</head>
+	<body class="animate">
+		<div id="loading"></div>
+		<form
+			id="labelsForm"
+			class="mainForm"
+			onsubmit="handleFormSubmit(this)"
+		>
+			<input
+				id="submit"
+				type="submit"
+				name="submit"
+				value="Submit"
+				disabled
+			/>
+		</form>
+		<div id="output"></div>
+		<?!= include('Views/lpDialogPageScripts'); ?>
+	</body>
+</html>

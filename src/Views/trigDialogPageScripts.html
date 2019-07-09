@@ -1,0 +1,98 @@
+<script>
+	/* eslint prettier/prettier: 0 */
+	/**
+	 * Stops multiple form submits and form redirects
+	 */
+	function preventFormSubmit() {
+		const forms = document.querySelectorAll('form');
+		forms.forEach((form) => {
+			form.addEventListener('submit', function(event) {
+				event.preventDefault();
+			});
+		});
+	}
+
+	window.addEventListener('load', preventFormSubmit);
+
+	/**
+	 * Changes body from animation to outcome message
+	 */
+	function messageUpdate() {
+		document.body.classList.replace('animate', 'message');
+	}
+
+	/**
+	 * Closes modal dialog in 1.6 seconds
+	 */
+	function closeWindow() {
+		setTimeout(() => {
+			google.script.host.close();
+		}, 1600);
+	}
+
+	/**
+	 * Changes outcome message to be an ok icon
+	 */
+	function messageUpdateSuccess() {
+		const output = document.getElementById('output');
+		output.classList.add('ok-icon');
+		messageUpdate();
+		closeWindow();
+	}
+
+	/**
+	 * Changes outcome message to be a fail icon
+	 */
+	function messageUpdateFail() {
+		const output = document.getElementById('output');
+		output.classList.add('fail-icon');
+		messageUpdate();
+		closeWindow();
+	}
+
+	/**
+	 * Starts loading animation while form is processed
+	 */
+	function handleFormSubmit(formObject) {
+		document.body.classList.add('animate');
+		google.script.run.withSuccessHandler(messageUpdateSuccess).withFailureHandler(messageUpdateFail).processTrigForm(formObject);
+	}
+
+	/**
+	 * Creates form inputs depending on if the trigger is currently running
+	 * @param  {boolean} currentlyTriggering If the trigger is currently running
+	 */
+	function populateForm(currentlyTriggering) {
+		const form = document.getElementById('trigForm');
+		const submit = document.createElement('input');
+		submit.type = 'submit';
+		submit.name = 'submit';
+		submit.id = 'submit';
+
+
+		const hiddenValue = document.createElement('input');
+		hiddenValue.style.display = 'none';
+		hiddenValue.type = 'checkbox';
+		hiddenValue.name = 'toChangeTo';
+		hiddenValue.checked = true;
+
+		if (currentlyTriggering) {
+			submit.value = 'Stop checking GMail';
+			hiddenValue.value = 'stop';
+		} else {
+			submit.value = 'Start checking GMail';
+			hiddenValue.value = 'start';
+		}
+		const documentFragment = document.createDocumentFragment();
+		documentFragment.appendChild(submit);
+		documentFragment.appendChild(hiddenValue);
+		form.appendChild(documentFragment);
+
+		document.body.classList.remove('animate');
+
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		google.script.run.withSuccessHandler(populateForm).returnIfCurrentlyTriggering();
+	});
+</script>

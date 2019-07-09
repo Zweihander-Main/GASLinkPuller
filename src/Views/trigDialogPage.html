@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<base target="_top" />
+		<?!= include('Views/commonStylesheet'); ?>
+	</head>
+	<body class="animate">
+		<div id="loading"></div>
+		<form
+			id="trigForm"
+			class="mainForm"
+			onsubmit="handleFormSubmit(this)"
+		></form>
+		<div id="output"></div>
+		<?!= include('Views/trigDialogPageScripts'); ?>
+	</body>
+</html>
