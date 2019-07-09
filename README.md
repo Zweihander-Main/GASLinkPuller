@@ -27,6 +27,8 @@ Turns automatic hourly checking of the GMail label on and off. If a new message 
 
 ### Manually Pull Messages
 
+This allows the user to manually call the function that would normally be called on their messages every hour. If the label is set, this is useful for testing prior to enabling the hourly trigger.
+
 ## Installation
 
 This project uses gulp in combination with [google/clasp](https://github.com/google/clasp#pull) to make seamless building easy. After logging in to `clasp`, it's recommended you `create` a new project. Do an initial build using `gulp buildLocal` and then execute `npx clasp push` to update the manifest of the project. After that, you can simply run `gulp build` for all subsequent runs and the project will be built and pushed to your spreadsheet.
