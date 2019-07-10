@@ -31,7 +31,7 @@ This allows the user to manually call the function that would normally be called
 
 ## Installation
 
-This project uses gulp in combination with [google/clasp](https://github.com/google/clasp#pull) to make seamless building easy. After logging in to `clasp`, it's recommended you `create` a new project. Do an initial build using `gulp buildLocal` and then execute `npx clasp push` to update the manifest of the project. After that, you can simply run `gulp build` for all subsequent runs and the project will be built and pushed to your spreadsheet.
+This project uses gulp in combination with [google/clasp](https://github.com/google/clasp#pull) to make seamless building easy. After logging in to `clasp`, it's recommended you `create` a new project. Do an initial build using `npm run buildLocal` and then execute `npx clasp push` to update the manifest of the project. After that, you can simply run `npm run build` for all subsequent runs and the project will be built and pushed to your spreadsheet.
 
 ## Sample spreadsheet
 

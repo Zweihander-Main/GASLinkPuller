@@ -21,7 +21,8 @@
 	},
 	"scripts": {
 		"test": "jest",
-		"build": "gulp build"
+		"build": "gulp build",
+		"buildLocal": "gulp buildLocal"
 	},
 	"jest": {
 		"transform": {
