@@ -37,7 +37,7 @@ function matchLinksReturnArray(stringToMatch) {
  * @return {boolean}            True if it matches twitter.com
  */
 function checkIfTwitter(urlToCheck) {
-	const twitterMatch = /^https?:\/\/([\w\d]+\.)?twitter\.com[A-Za-z0-9&?\-/_]*$/;
+	const twitterMatch = /^https?:\/\/([\w\d]+\.)?twitter\.com[A-Za-z0-9&?\-/_=]*$/;
 	return twitterMatch.test(urlToCheck);
 }
 
