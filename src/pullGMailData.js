@@ -61,6 +61,11 @@ function pullTwitterData(urlToPull) {
 	}
 }
 
+/**
+ * Function to row at the top of the sheet so most recent data is listed first
+ * @param  {googleSheet} sheet           Current sheet
+ * @param  {[array]} rowDataToInsert     Single array of values to insert in row
+ */
 function insertData(sheet, rowDataToInsert) {
 	sheet.insertRows(2, 1);
 	sheet.getRange(2, 1, 1, 3).setValues([rowDataToInsert]);
