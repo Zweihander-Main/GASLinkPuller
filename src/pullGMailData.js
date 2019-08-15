@@ -61,6 +61,11 @@ function pullTwitterData(urlToPull) {
 	}
 }
 
+function insertData(sheet, rowDataToInsert) {
+	sheet.insertRows(2, 1);
+	sheet.getRange(2, 1, 1, 3).setValues([rowDataToInsert]);
+}
+
 /**
  * Function to be called by user trigger to check user's set GMail label for
  * any new unread messages. Will not check if label is not set. If a new
@@ -110,7 +115,7 @@ function pullGMailData() {
 							Session.getScriptTimeZone(),
 							'MM/dd/yyyy'
 						);
-						dataSheet.appendRow([
+						insertData(dataSheet, [
 							formattedDate,
 							linkData,
 							twitterData,
