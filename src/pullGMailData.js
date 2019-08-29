@@ -23,7 +23,7 @@ function returnCurrentUserLabelSet() {
 function matchLinksReturnArray(stringToMatch) {
 	const urlMatchingRegex = /^((((?:https?){1}:(?:\/\/)?)(?:[^\-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)$/gm;
 	const foundArray = stringToMatch.match(urlMatchingRegex);
-	if (foundArray && foundArray.length === 0) {
+	if (foundArray === null && foundArray.length === 0) {
 		Logger.log('No URL found in: ' + stringToMatch);
 		return [];
 	} else {
