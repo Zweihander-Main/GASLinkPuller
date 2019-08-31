@@ -8,6 +8,7 @@ A Google Apps Script project for pulling URLs from emails in a user-selected GMa
 -   Turn hourly checking of the label on and off
 -   Find all major URLs in a message from a memo-like sharing action and ignore unimportant URLs
 -   Pull in Tweet textual data if a URL points to Twitter
+-   Pull in page title if URL doesn't point to Twitter
 -   Facilitates seamless link sharing between 2 or more parties
 
 ## Usage
@@ -32,6 +33,8 @@ This allows the user to manually call the function that would normally be called
 ## Installation
 
 This project uses gulp in combination with [google/clasp](https://github.com/google/clasp#pull) to make seamless building easy. After logging in to `clasp`, it's recommended you `create` a new project. Do an initial build using `npm run buildLocal` and then execute `npx clasp push` to update the manifest of the project. After that, you can simply run `npm run build` for all subsequent runs and the project will be built and pushed to your spreadsheet.
+
+Note that you may want to whitelist URLs for security purposes by setting `urlFetchWhitelist` in the `appsscript.json` file. This affects Tweet and page title fetching.
 
 ## Sample spreadsheet
 

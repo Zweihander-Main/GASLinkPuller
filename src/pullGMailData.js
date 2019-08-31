@@ -22,13 +22,19 @@ function returnCurrentUserLabelSet() {
  */
 function matchLinksReturnArray(stringToMatch) {
 	const urlMatchingRegex = /^((((?:https?){1}:(?:\/\/)?)(?:[^\-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)$/gm;
-	const foundArray = stringToMatch.match(urlMatchingRegex);
+	let foundArray = stringToMatch.match(urlMatchingRegex);
 	if (foundArray === null || foundArray.length === 0) {
-		Logger.log('No URL found in: ' + stringToMatch);
-		return [];
-	} else {
-		return foundArray;
+		const lineEndingURLsRegex = /((((?:https?){1}:(?:\/\/)?)(?:[^\-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)$/gm;
+		foundArray = stringToMatch.match(lineEndingURLsRegex);
+		if (foundArray === null || foundArray.length === 0) {
+			const anyURLsRegex = /((((?:https?){1}:(?:\/\/)?)(?:[^\-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)/gm;
+			foundArray = stringToMatch.match(anyURLsRegex);
+			if (foundArray === null || foundArray.length === 0) {
+				return [];
+			}
+		}
 	}
+	return foundArray;
 }
 
 /**
@@ -48,17 +54,50 @@ function checkIfTwitter(urlToCheck) {
  * @return {string}           Tweet contents or empty string
  */
 function pullTwitterData(urlToPull) {
-	const response = UrlFetchApp.fetch(
-		'https://publish.twitter.com/oembed?omit_script=true&dnt=true&url=' +
-			urlToPull
-	);
-	if (response.getResponseCode() == 200) {
-		const responseObject = JSON.parse(response.getContentText());
-		const html = responseObject.html;
-		return html.replace(/<[^>]+>/g, '').trim();
-	} else {
-		return '';
+	try {
+		const response = UrlFetchApp.fetch(
+			'https://publish.twitter.com/oembed?omit_script=true&dnt=true&url=' +
+				urlToPull
+		);
+		if (response.getResponseCode() == 200) {
+			const responseObject = JSON.parse(response.getContentText());
+			const html = responseObject.html;
+			return html.replace(/<[^>]+>/g, '').trim();
+		}
+	} catch (e) {
+		console.log({
+			message: 'Pulling Twitter data from URL failed for ' + urlToPull,
+			error: e,
+		});
 	}
+	return '';
+}
+
+/**
+ * Gets the title attribute of a URL.
+ * @param  {string} urlToPull URL to query
+ * @return {string}           Title of URL
+ */
+function pullURLTitle(urlToPull) {
+	try {
+		const response = UrlFetchApp.fetch(urlToPull);
+		if (response.getResponseCode() == 200) {
+			const contentText = response.getContentText();
+			// deprecated but using as it's more forgiving of malformed html vs
+			// XmlService
+			const documentData = Xml.parse(contentText, true);
+			const title = documentData.html.head
+				.getElements('title')[0]
+				.getText();
+			return title.trim();
+		}
+	} catch (e) {
+		console.log({
+			message: 'Pulling title from URL failed for ' + urlToPull,
+			error: e,
+		});
+	}
+	return '';
 }
 
 /**
@@ -68,8 +107,63 @@ function pullTwitterData(urlToPull) {
  */
 function insertData(sheet, rowDataToInsert) {
 	sheet.insertRows(2, 1);
-	sheet.getRange(2, 1, 1, 3).setValues([rowDataToInsert]);
+	sheet
+		.getRange(2, 1, 1, rowDataToInsert.length)
+		.setValues([rowDataToInsert]);
 }
+
+/**
+ * Logs a GAS message object to the Debug sheet. For use when no links could be
+ * found.
+ *
+ * @param      {GAS Message}  message  The message to log info for
+ */
+function logMessageToDebug(message) {
+	const debugSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
+		'Debug'
+	);
+	const body = message.getBody();
+	const date = message.getDate();
+	const subject = message.getSubject();
+	const thread = message.getThread();
+	const threadId = thread.getId();
+	const threadNum = thread.getMessageCount();
+	const isUnread = message.isUnread();
+	const formattedDate = Utilities.formatDate(
+		date,
+		Session.getScriptTimeZone(),
+		'MM/dd/yyyy'
+	);
+	insertData(debugSheet, [
+		formattedDate,
+		subject,
+		body,
+		isUnread,
+		threadId,
+		threadNum,
+	]);
+}
+
+/**
+ * For debugging purposes only. Will pull all messages from the label regardless
+ * of read status and add them to Debug sheet.
+ */
+// function debugGMail() {
+// 	const userSetLabel = returnCurrentUserLabelSet();
+// 	if (userSetLabel) {
+// 		const label = GmailApp.getUserLabelByName(userSetLabel);
+// 		if (label !== null) {
+// 			const threads = label.getThreads();
+// 			threads.forEach((thread) => {
+// 				const messages = thread.getMessages();
+// 				messages.forEach((message) => {
+// 					logMessageToDebug(message);
+// 				});
+// 				thread.markUnread();
+// 			});
+// 		}
+// 	}
+// }
 
 /**
  * Function to be called by user trigger to check user's set GMail label for
@@ -81,6 +175,7 @@ function insertData(sheet, rowDataToInsert) {
  * Finally, will mark the message unread.
  */
 function pullGMailData() {
+	// debugGMail();
 	const userSetLabel = returnCurrentUserLabelSet();
 	if (userSetLabel) {
 		const dataSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
@@ -95,36 +190,41 @@ function pullGMailData() {
 					const messages = thread.getMessages();
 					messages.forEach((message) => {
 						const linksArray = matchLinksReturnArray(
-							message.getBody()
+							message.getBody().trim()
 						);
-						let twitterData = '';
-						let linkData = '';
-						linksArray.forEach((link) => {
-							if (checkIfTwitter(link)) {
-								if (twitterData === '') {
-									twitterData += pullTwitterData(link);
-								} else {
-									twitterData +=
-										'\n---\n' + pullTwitterData(link);
+						if (linksArray.length === 0) {
+							logMessageToDebug(message);
+						} else {
+							let pageData = '';
+							let linkData = '';
+							linksArray.forEach((link) => {
+								let dataPuller = pullURLTitle;
+								if (checkIfTwitter(link)) {
+									dataPuller = pullTwitterData;
 								}
-							}
-							if (linkData === '') {
-								linkData += link;
-							} else {
-								linkData += '\n' + link;
-							}
-						});
-						const date = message.getDate();
-						const formattedDate = Utilities.formatDate(
-							date,
-							Session.getScriptTimeZone(),
-							'MM/dd/yyyy'
-						);
-						insertData(dataSheet, [
-							formattedDate,
-							linkData,
-							twitterData,
-						]);
+								if (pageData === '') {
+									pageData += dataPuller(link);
+								} else {
+									pageData += '\n---\n' + dataPuller(link);
+								}
+								if (linkData === '') {
+									linkData += link;
+								} else {
+									linkData += '\n' + link;
+								}
+							});
+							const date = message.getDate();
+							const formattedDate = Utilities.formatDate(
+								date,
+								Session.getScriptTimeZone(),
+								'MM/dd/yyyy'
+							);
+							insertData(dataSheet, [
+								formattedDate,
+								linkData,
+								pageData,
+							]);
+						}
 					});
 					thread.markRead();
 				});

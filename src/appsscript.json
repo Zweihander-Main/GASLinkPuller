@@ -8,6 +8,5 @@
 		"https://www.googleapis.com/auth/spreadsheets"
 	],
 	"dependencies": {},
-	"exceptionLogging": "STACKDRIVER",
-	"urlFetchWhitelist": ["https://publish.twitter.com/oembed"]
+	"exceptionLogging": "STACKDRIVER"
 }
