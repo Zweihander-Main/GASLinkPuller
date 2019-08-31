@@ -15,7 +15,9 @@ function returnCurrentUserLabelSet() {
 /**
  * Matches urls from a given string. Urls are expected to be using http/https
  * protocol. Is looking for URLs that take up the whole line which should be
- * the ones this script is aiming for.
+ * the ones this script is aiming for. If none can be found, it will look for
+ * URLs which end the line. If none can be found, it will look for any URLs at
+ * all.
  * @param  {string} stringToMatch Likely message body from which URLs are to be
  *                                extracted
  * @return {[string]}               Array of matches or empty array if not found
